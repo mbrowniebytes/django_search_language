@@ -1,0 +1,70 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Search Github Repos by Language</title>
+    {% render_bundle 'main' 'css' %}
+  </head>
+  <body>
+    <h1 class="text-center">Search Github Repos by Language</h1>
+    
+    <style>
+      .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+      }    
+    </style>
+    
+    
+    <div class="container text-center">
+        <form class="form-signin" id="login_form" method="post" action="/app/language/">
+          {% csrf_token %}
+    
+          <br>
+          <input type="text" name="language" class="form-control" placeholder="Github Programming Language, e.g: Python" value="" required autofocus>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="col-lg-12">
+        Recently updated <strong>{{ language }}</strong> GitHub Repos
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped tablesorter">
+                <thead>
+                <tr>
+                  <th class="header"> Name <i class="icon-sort"></i></th>
+                  <th class="header"> Description <i class="icon-sort"></i></th>
+                  <th class="header"> Stars <i class="icon-sort"></i></th>
+                  <th class="header"> Watchers <i class="icon-sort"></i></th>
+                  <th class="header"> Forks <i class="icon-sort"></i></th>
+                  <th class="header"> Updated <i class="icon-sort"></i></th>
+                  <th class="header"> Created <i class="icon-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            {% for key in data %}
+                <tr>
+                    <td>
+                        <a href="{{key.html_url}}" class="fa fa-external-link" target="_blank">{{ key.full_name }}</a>  
+                    </td>
+                    <td>{{ key.description }}</td>
+                    <td>{{ key.stargazers_count }}</td>
+                    <td>{{ key.watchers_count }}</td>
+                    <td>{{ key.forks_count }}</td>
+                    <td>{{ key.pushed_at }}</td>
+                    <td>{{ key.created_at }}</td>
+                </tr>
+            {% endfor %}
+            
+            </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+    
+    {% render_bundle 'main' 'js' %}
+  </body>
+</head>
